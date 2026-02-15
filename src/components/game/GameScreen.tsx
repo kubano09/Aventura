@@ -239,17 +239,17 @@ export function GameScreen() {
                 <div className="mt-4 space-y-6 px-6 pb-8">
                   {/* Profesión */}
                   <section className="rounded-lg border border-slate-800/60 bg-slate-950/30 p-4">
-                    <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                       Profesión
                     </h3>
-                    <p className="text-slate-300">
+                    <p className="text-slate-200 text-base">
                       {character.profession.charAt(0).toUpperCase() + character.profession.slice(1)}
                     </p>
                   </section>
 
                   {/* Atributos */}
                   <section className="rounded-lg border border-slate-800/60 bg-slate-950/30 p-4">
-                    <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
+                    <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">
                       Atributos
                     </h3>
                     <div className="grid grid-cols-2 gap-3">
@@ -278,9 +278,25 @@ export function GameScreen() {
 
                   {/* Corrupción e Insight */}
                   <section className="rounded-lg border border-slate-800/60 bg-slate-950/30 p-4">
-                    <h3 className="text-sm font-medium text-slate-500 uppercase tracking-wider mb-2">
-                      Estado
-                    </h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Estado
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className={cn("text-xs", getCorruptionColor(character.corruptionLevel))}
+                        >
+                          Corrupcion {character.corruptionLevel}%
+                        </Badge>
+                        <Badge
+                          variant="outline"
+                          className={cn("text-xs", getInsightColor(character.insightLevel))}
+                        >
+                          Conocimiento {character.insightLevel}%
+                        </Badge>
+                      </div>
+                    </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-slate-400 flex items-center gap-2">
@@ -527,4 +543,23 @@ export function GameScreen() {
                       {!canChoose && (
                         <span className="ml-auto text-xs text-slate-600">
                           (No cumples requisitos)
-   
+                        </span>
+                      )}
+                    </Button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-slate-900/80 border-t border-red-900/30 p-2 text-center">
+        <p className="text-xs text-slate-600">
+          Carne y Ceniza - Una aventura de terror interactiva
+        </p>
+      </footer>
+    </div>
+  );
+}
