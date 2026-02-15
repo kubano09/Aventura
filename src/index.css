@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Tema oscuro por defecto para el juego de terror */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 0 72% 41%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 222 47% 11%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 222 47% 11%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 0 72% 41%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 0 72% 20%;
+    --input: 222 47% 11%;
+    --ring: 0 72% 41%;
+    --radius: 0.5rem;
+    --sidebar-background: 222 47% 6%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 0 72% 41%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 222 47% 11%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 0 72% 20%;
+    --sidebar-ring: 0 72% 41%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Tipografía para títulos */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Crimson Text', Georgia, serif;
+    font-weight: 600;
+  }
+  
+  /* Mejorar legibilidad del texto */
+  p {
+    line-height: 1.7;
+  }
+}
+
+@layer components {
+  /* Botón principal del juego */
+  .btn-game {
+    @apply relative overflow-hidden bg-red-900 hover:bg-red-800 text-white transition-all duration-300;
+  }
+  
+  .btn-game::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full;
+    transition: transform 0.5s ease;
+  }
+  
+  .btn-game:hover::before {
+    @apply translate-x-full;
+  }
+  
+  /* Tarjeta de juego */
+  .card-game {
+    @apply bg-slate-900/80 border-red-900/30 backdrop-blur-sm;
+  }
+  
+  /* Texto de narración */
+  .text-narrative {
+    @apply text-slate-300 leading-relaxed;
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 1.1rem;
+  }
+  
+  /* Título de escena */
+  .scene-title {
+    @apply text-2xl font-bold text-red-400;
+    font-family: 'Crimson Text', Georgia, serif;
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+  }
+}
+
+@layer utilities {
+  /* Animación de fade in */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Animación de slide in */
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Efecto de brillo sutil */
+  .glow-subtle {
+    box-shadow: 0 0 30px rgba(127, 29, 29, 0.15);
+  }
+  
+  /* Gradiente de sangre */
+  .bg-blood-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 1) 0%,
+      rgba(88, 28, 28, 0.1) 50%,
+      rgba(15, 23, 42, 1) 100%
+    );
+  }
+  
+  /* Texto con gradiente */
+  .text-gradient-blood {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(
+      135deg,
+      #ef4444 0%,
+      #dc2626 50%,
+      #991b1b 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Estilos para impresión */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}
