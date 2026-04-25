@@ -18,12 +18,18 @@ Todos los cambios relevantes del proyecto se documentan aqui.
 - Persistencia local base con IndexedDB.
 - Tests unitarios iniciales del motor narrativo en `tests/domain/runtime.test.ts`.
 - Workflow de CI en GitHub Actions (`.github/workflows/ci.yml`).
+- Runtime local jugable semilla en portada con transiciones de nodos y elecciones.
+- Rehidratacion de sesion local desde IndexedDB para continuar partida.
+- Registro de auditoria local minima de eventos de sesion y decisiones.
+- Guia de despliegue automatico GitHub -> Hostinger en `docs/DEPLOY_HOSTINGER.md`.
 
 ### Changed
 - Home inicial reemplazada por portada de estado de proyecto.
 - Metadata de app actualizada a "Aventura".
 - Scripts npm ampliados para chequeos y Prisma.
 - Scripts npm ampliados con `test:unit`.
+- CI ahora ejecuta `lint`, `typecheck`, `test:unit` y `build`.
+- Scripts npm ampliados con `prisma:migrate:deploy` para produccion.
 
 ### Security
 - Lineamientos iniciales para seguridad app e IA documentados.

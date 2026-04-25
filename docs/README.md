@@ -13,4 +13,5 @@
 - `ROADMAP.md` - plan por fases.
 - `CHANGELOG.md` - historial de cambios.
 - `SESSION_LOG.md` - memoria por sesion.
+- `DEPLOY_HOSTINGER.md` - guia de despliegue automatico en Hostinger.
 - `DECISIONS/` - ADRs.

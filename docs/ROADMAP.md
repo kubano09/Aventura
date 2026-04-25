@@ -25,12 +25,12 @@ Estado: `in_progress`
 ---
 
 ## Fase 1 - Runtime local jugable
-Estado: `pending`
+Estado: `in_progress`
 
 ### Entregables
-- Flujo nueva partida y continuar partida.
-- Aventura semilla jugable extremo a extremo.
-- Autosave local con IndexedDB.
+- Flujo nueva partida y continuar partida. (en progreso)
+- Aventura semilla jugable extremo a extremo. (version inicial completada)
+- Autosave local con IndexedDB. (version inicial completada)
 
 ### Criterio de done
 - Usuario juega, cierra, vuelve y continua sin perder estado.

@@ -8,7 +8,8 @@ Base tecnica para una aventura conversacional local, online y cooperativa, con e
 - Modelo de datos base en Prisma.
 - Motor narrativo inicial tipado.
 - Tests unitarios base del motor narrativo.
-- Pipeline CI minima con lint + typecheck.
+- Pipeline CI con lint + typecheck + unit tests + build.
+- Vertical slice inicial de runtime local jugable con autosave y continuar.
 
 ## Stack
 - Next.js 16 + TypeScript + Tailwind.
@@ -36,6 +37,7 @@ Base tecnica para una aventura conversacional local, online y cooperativa, con e
 - `npm run check` - lint + typecheck.
 - `npm run prisma:generate` - generar cliente Prisma.
 - `npm run prisma:migrate` - ejecutar migraciones en desarrollo.
+- `npm run prisma:migrate:deploy` - ejecutar migraciones en produccion.
 - `npm run prisma:studio` - explorar datos.
 - `npm run prisma:seed` - poblar datos semilla.
 
@@ -44,6 +46,7 @@ Base tecnica para una aventura conversacional local, online y cooperativa, con e
 - `docs/CHANGELOG.md` - historial de cambios.
 - `docs/SESSION_LOG.md` - continuidad entre sesiones.
 - `docs/DECISIONS/` - ADRs con decisiones clave.
+- `docs/DEPLOY_HOSTINGER.md` - despliegue automatico GitHub -> Hostinger.
 
 ## Siguiente hito
-Cerrar Fase 0 ejecutando primera migracion en DB real y avanzar a Fase 1: runtime local jugable con guardado automatico y aventura semilla jugable de extremo a extremo.
+Cerrar Fase 0 ejecutando primera migracion en DB real y consolidar Fase 1 conectando la aventura semilla desde Prisma, selector de aventura y cobertura de tests para runtime UI + guardado local.

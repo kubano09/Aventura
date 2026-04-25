@@ -57,3 +57,39 @@
 ### Estado roadmap
 - Fase 0: `in_progress` (~90%).
 - Fases 1-6: `pending`.
+
+## 2026-04-25 - Sesion 003
+
+### Objetivo
+- Iniciar Fase 1 con un vertical slice jugable local.
+
+### Hecho
+- Se implemento aventura semilla jugable en `src/features/runtime/seed-adventure.ts`.
+- Se conecto UI de juego y decisiones en `src/features/runtime/game-shell.tsx`.
+- Se agrego autosave y rehidratacion local para continuar sesion.
+- Se agrego auditoria local minima de eventos en IndexedDB.
+
+### Pendiente inmediato
+1. Añadir selector de aventuras publicadas desde datos persistidos.
+2. Integrar aventura semilla desde Prisma en lugar de fixture local.
+3. Cubrir runtime UI/local-store con tests unitarios e integracion.
+
+### Estado roadmap
+- Fase 0: `in_progress` (~90%, bloqueo DB migration).
+- Fase 1: `in_progress` (vertical slice local inicial).
+- Fases 2-6: `pending`.
+
+## 2026-04-25 - Sesion 004
+
+### Objetivo
+- Preparar base de despliegue automatico con GitHub y Hostinger.
+
+### Hecho
+- Se robustecio CI para correr `prisma:generate`, `lint`, `typecheck`, `test:unit` y `build`.
+- Se agrego script `prisma:migrate:deploy` para migraciones de produccion.
+- Se documento flujo de auto deploy y checklist de produccion en `docs/DEPLOY_HOSTINGER.md`.
+
+### Pendiente inmediato
+1. Configurar variables de entorno de produccion en Hostinger.
+2. Configurar paso de `prisma migrate deploy` en el flujo de deploy del panel.
+3. Verificar `/api/health` tras primer deploy automatico.

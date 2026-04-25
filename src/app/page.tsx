@@ -1,3 +1,5 @@
+import { GameShell } from "@/features/runtime/game-shell";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[linear-gradient(160deg,#f8f1e6_0%,#f2e6d4_55%,#e8d7be_100%)] text-stone-900">
@@ -10,10 +12,12 @@ export default function Home() {
             Base creada para construir una experiencia local, online y cooperativa.
           </h1>
           <p className="max-w-2xl text-lg text-stone-700">
-            Este proyecto ya incluye cimientos técnicos, memoria de decisiones,
-            roadmap detallado y changelog para mantener continuidad entre sesiones.
+            Ya puedes jugar un recorrido semilla local con autosave en IndexedDB,
+            continuar sesion y revisar una auditoria minima de eventos.
           </p>
         </header>
+
+        <GameShell />
 
         <div className="grid gap-4 md:grid-cols-2">
           <article className="rounded-2xl border border-amber-900/20 bg-white/70 p-6 shadow-sm">
@@ -27,8 +31,8 @@ export default function Home() {
           <article className="rounded-2xl border border-amber-900/20 bg-white/70 p-6 shadow-sm">
             <h2 className="text-xl font-semibold">Nucleo preparado</h2>
             <p className="mt-3 text-stone-700">
-              Se incluye esquema Prisma inicial, motor narrativo tipado,
-              validacion de entorno y estructura modular pensada para escalar.
+              Se incluye esquema Prisma inicial, motor narrativo tipado y
+              estructura modular lista para cooperativo online, editor y PWA.
             </p>
           </article>
         </div>
