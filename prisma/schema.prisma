@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SessionMode {
+  LOCAL
+  ONLINE_COOP
+}
+
+enum SessionStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ABANDONED
+}
+
+enum PlayerRole {
+  HOST
+  PLAYER
+  OBSERVER
+}
+
+enum EventSource {
+  SYSTEM
+  PLAYER
+  SYNC
+}
+
+model User {
+  id          String          @id @default(cuid())
+  email       String?         @unique
+  displayName String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  devices     Device[]
+  sessions    Session[]
+  memberships SessionPlayer[]
+  saveLinks   SaveLink[]
+}
+
+model Device {
+  id           String   @id @default(cuid())
+  userId       String?
+  fingerprint  String   @unique
+  label        String?
+  createdAt    DateTime @default(now())
+  lastSeenAt   DateTime @default(now())
+  localSaveRef String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, lastSeenAt])
+}
+
+model Adventure {
+  id             String             @id @default(cuid())
+  slug           String             @unique
+  title          String
+  summary        String
+  createdBy      String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  latestVersion  Int                @default(1)
+  versions       AdventureVersion[]
+  sessions       Session[]
+}
+
+model AdventureVersion {
+  id            String          @id @default(cuid())
+  adventureId   String
+  version       Int
+  status        String          @default("draft")
+  titleSnapshot String
+  schemaVersion Int             @default(1)
+  createdAt     DateTime        @default(now())
+  publishedAt   DateTime?
+  adventure     Adventure       @relation(fields: [adventureId], references: [id], onDelete: Cascade)
+  nodes         AdventureNode[]
+  choices       AdventureChoice[]
+  sessions      Session[]
+
+  @@unique([adventureId, version])
+  @@index([adventureId, status])
+}
+
+model AdventureNode {
+  id                 String           @id @default(cuid())
+  adventureVersionId String
+  key                String
+  title              String
+  body               String
+  tags               String[]
+  effectsJson        Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  adventureVersion   AdventureVersion @relation(fields: [adventureVersionId], references: [id], onDelete: Cascade)
+  choicesFrom        AdventureChoice[] @relation("ChoiceFrom")
+  choicesTo          AdventureChoice[] @relation("ChoiceTo")
+
+  @@unique([adventureVersionId, key])
+  @@index([adventureVersionId])
+}
+
+model AdventureChoice {
+  id                 String           @id @default(cuid())
+  adventureVersionId String
+  fromNodeId         String
+  toNodeId           String
+  key                String
+  label              String
+  order              Int              @default(0)
+  conditionsJson     Json?
+  effectsJson        Json?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  adventureVersion   AdventureVersion @relation(fields: [adventureVersionId], references: [id], onDelete: Cascade)
+  fromNode           AdventureNode    @relation("ChoiceFrom", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNode             AdventureNode    @relation("ChoiceTo", fields: [toNodeId], references: [id], onDelete: Cascade)
+
+  @@unique([adventureVersionId, fromNodeId, key])
+  @@index([adventureVersionId, fromNodeId])
+}
+
+model Session {
+  id                 String            @id @default(cuid())
+  userId             String?
+  adventureId        String
+  adventureVersionId String
+  mode               SessionMode
+  status             SessionStatus     @default(ACTIVE)
+  title              String
+  roomCode           String?
+  currentNodeKey     String
+  stateJson          Json
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  lastEventSeq       Int               @default(0)
+  user               User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  adventure          Adventure         @relation(fields: [adventureId], references: [id], onDelete: Cascade)
+  adventureVersion   AdventureVersion  @relation(fields: [adventureVersionId], references: [id], onDelete: Restrict)
+  players            SessionPlayer[]
+  events             SessionEvent[]
+  snapshots          SessionSnapshot[]
+  saveLinks          SaveLink[]
+
+  @@index([userId, updatedAt])
+  @@index([adventureId, status])
+  @@index([roomCode])
+}
+
+model SessionPlayer {
+  id        String     @id @default(cuid())
+  sessionId String
+  userId    String?
+  nickname  String
+  role      PlayerRole @default(PLAYER)
+  joinedAt  DateTime   @default(now())
+  leftAt    DateTime?
+  session   Session    @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user      User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId, joinedAt])
+  @@index([userId, joinedAt])
+}
+
+model SessionEvent {
+  id         String      @id @default(cuid())
+  sessionId  String
+  seq        Int
+  source     EventSource
+  type       String
+  payload    Json
+  actorId    String?
+  createdAt  DateTime    @default(now())
+  session    Session     @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, seq])
+  @@index([sessionId, createdAt])
+}
+
+model SessionSnapshot {
+  id         String   @id @default(cuid())
+  sessionId  String
+  seq        Int
+  stateJson  Json
+  createdAt  DateTime @default(now())
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, seq])
+}
+
+model SaveLink {
+  id               String   @id @default(cuid())
+  userId           String
+  sessionId        String
+  deviceFingerprint String
+  linkedAt         DateTime @default(now())
+  status           String   @default("active")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session          Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, linkedAt])
+  @@index([sessionId, linkedAt])
+}

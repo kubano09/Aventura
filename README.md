@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aventura
 
-## Getting Started
+Base tecnica para una aventura conversacional local, online y cooperativa, con enfoque en escalabilidad, PWA y preparacion para IA futura.
 
-First, run the development server:
+## Estado actual
+- Foundation inicial creada.
+- Documentacion operativa completa en `docs/`.
+- Modelo de datos base en Prisma.
+- Motor narrativo inicial tipado.
+- Tests unitarios base del motor narrativo.
+- Pipeline CI minima con lint + typecheck.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Stack
+- Next.js 16 + TypeScript + Tailwind.
+- Prisma + PostgreSQL.
+- Socket.IO.
+- IndexedDB (idb).
+- Zod para contratos.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Arranque rapido
+1. Copia variables de entorno:
+   - `cp .env.example .env`
+2. Instala dependencias:
+   - `npm install`
+3. Genera cliente Prisma:
+   - `npm run prisma:generate`
+4. Levanta el proyecto:
+   - `npm run dev`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
+- `npm run dev` - servidor de desarrollo.
+- `npm run build` - build de produccion.
+- `npm run start` - servir build.
+- `npm run lint` - linting.
+- `npm run typecheck` - chequeo de tipos.
+- `npm run check` - lint + typecheck.
+- `npm run prisma:generate` - generar cliente Prisma.
+- `npm run prisma:migrate` - ejecutar migraciones en desarrollo.
+- `npm run prisma:studio` - explorar datos.
+- `npm run prisma:seed` - poblar datos semilla.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Memoria de proyecto
+- `docs/ROADMAP.md` - plan detallado por fases.
+- `docs/CHANGELOG.md` - historial de cambios.
+- `docs/SESSION_LOG.md` - continuidad entre sesiones.
+- `docs/DECISIONS/` - ADRs con decisiones clave.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Siguiente hito
+Cerrar Fase 0 ejecutando primera migracion en DB real y avanzar a Fase 1: runtime local jugable con guardado automatico y aventura semilla jugable de extremo a extremo.
