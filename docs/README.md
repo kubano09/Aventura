@@ -14,4 +14,5 @@
 - `CHANGELOG.md` - historial de cambios.
 - `SESSION_LOG.md` - memoria por sesion.
 - `DEPLOY_HOSTINGER.md` - guia de despliegue automatico en Hostinger.
+- `SUPABASE_SETUP.md` - configuracion de PostgreSQL en Supabase.
 - `DECISIONS/` - ADRs.

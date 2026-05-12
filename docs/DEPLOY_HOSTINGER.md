@@ -16,6 +16,8 @@ Guia para desplegar `Aventura` en Hostinger con integracion directa a este repos
 - Build command: `npm run build`
 - Start command: `npm run start`
 
+Nota: el proyecto ejecuta `prisma generate` automaticamente en `postinstall`.
+
 Si Hostinger permite comando adicional post-build, ejecutar tambien:
 - `npx prisma migrate deploy`
 
@@ -28,6 +30,10 @@ Si solo permite un comando de build, usar:
 - `PINO_LOG_LEVEL=info`
 - `NEXT_PUBLIC_APP_NAME`
 - `NEXT_PUBLIC_APP_URL`
+
+Para Supabase:
+- `DATABASE_URL` debe incluir SSL (`?sslmode=require`).
+- Recomendada la cadena de **Session pooler**.
 
 Opcionales segun feature:
 - `NEXTAUTH_SECRET`
@@ -51,3 +57,5 @@ Opcionales segun feature:
 - No usar `prisma migrate dev` en servidor productivo.
 - Usar siempre `prisma migrate deploy`.
 - Ejecutar `prisma:seed` solo si quieres datos iniciales de forma controlada.
+
+Ver guia detallada para Supabase en `docs/SUPABASE_SETUP.md`.

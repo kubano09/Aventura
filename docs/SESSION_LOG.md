@@ -93,3 +93,35 @@
 1. Configurar variables de entorno de produccion en Hostinger.
 2. Configurar paso de `prisma migrate deploy` en el flujo de deploy del panel.
 3. Verificar `/api/health` tras primer deploy automatico.
+
+## 2026-04-25 - Sesion 005
+
+### Objetivo
+- Empezar integracion de runtime con aventura publicada sin romper despliegue UI-only.
+
+### Hecho
+- Se implemento `GET /api/adventures/[slug]` con fallback a aventura semilla.
+- Se agrego capa server para construir contrato de runtime desde Prisma (`adventureVersion`, nodos y opciones).
+- Se actualizo `GameShell` para consumir aventura desde backend y rehidratar guardado compatible.
+- Se hizo `prisma/seed.ts` idempotente mediante upserts.
+- Se agrego `postinstall` con `prisma generate` para evitar fallos de build en hosting.
+
+### Pendiente inmediato
+1. Crear primera migracion SQL versionada (`prisma migrate dev --name init`) en entorno con DB activa.
+2. Activar `prisma migrate deploy` en flujo de Hostinger.
+3. Añadir tests de transformacion DB -> `Adventure` y del endpoint `/api/adventures/[slug]`.
+
+## 2026-04-25 - Sesion 006
+
+### Objetivo
+- Preparar camino de migracion a PostgreSQL con Supabase para produccion.
+
+### Hecho
+- Se documento configuracion completa en `docs/SUPABASE_SETUP.md`.
+- Se actualizo `docs/DEPLOY_HOSTINGER.md` con recomendaciones especificas para Supabase (`sslmode=require`, session pooler).
+- Se actualizo indice de documentacion para incluir la nueva guia.
+
+### Pendiente inmediato
+1. Crear proyecto en Supabase y obtener `DATABASE_URL` real.
+2. Cargar variables en Hostinger.
+3. Ejecutar primer `prisma migrate deploy` en deploy de produccion.

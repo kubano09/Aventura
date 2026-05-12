@@ -31,6 +31,7 @@ Estado: `in_progress`
 - Flujo nueva partida y continuar partida. (en progreso)
 - Aventura semilla jugable extremo a extremo. (version inicial completada)
 - Autosave local con IndexedDB. (version inicial completada)
+- Carga de aventura publicada desde backend con fallback local. (version inicial completada)
 
 ### Criterio de done
 - Usuario juega, cierra, vuelve y continua sin perder estado.

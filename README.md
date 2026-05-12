@@ -29,6 +29,7 @@ Base tecnica para una aventura conversacional local, online y cooperativa, con e
    - `npm run dev`
 
 ## Scripts
+- `npm run postinstall` - genera Prisma Client automaticamente tras instalar dependencias.
 - `npm run dev` - servidor de desarrollo.
 - `npm run build` - build de produccion.
 - `npm run start` - servir build.

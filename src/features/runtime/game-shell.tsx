@@ -6,7 +6,11 @@ import {
   getCurrentNode,
   initState,
 } from "@/domain/engine/runtime";
-import type { RuntimeState } from "@/domain/types/adventure";
+import {
+  adventureSchema,
+  type Adventure,
+  type RuntimeState,
+} from "@/domain/types/adventure";
 import {
   appendLocalAuditEvent,
   clearLocalAuditEvents,
@@ -37,8 +41,11 @@ function createAuditEvent(
 }
 
 export function GameShell() {
+  const [adventure, setAdventure] = useState<Adventure>(seedAdventure);
+  const [adventureSource, setAdventureSource] = useState<"seed" | "db">("seed");
   const [runtimeState, setRuntimeState] = useState<RuntimeState | null>(null);
   const [auditEvents, setAuditEvents] = useState<LocalAuditEvent[]>([]);
+  const [isLoadingAdventure, setIsLoadingAdventure] = useState(true);
   const [isHydrating, setIsHydrating] = useState(true);
   const [isPending, startTransition] = useTransition();
 
@@ -47,8 +54,12 @@ export function GameShell() {
       return null;
     }
 
-    return getCurrentNode(seedAdventure, runtimeState);
-  }, [runtimeState]);
+    try {
+      return getCurrentNode(adventure, runtimeState);
+    } catch {
+      return null;
+    }
+  }, [adventure, runtimeState]);
 
   const hasSave = runtimeState !== null;
   const activeState = runtimeState;
@@ -56,17 +67,74 @@ export function GameShell() {
   useEffect(() => {
     let isMounted = true;
 
+    async function loadAdventure() {
+      try {
+        const response = await fetch("/api/adventures/demo-bosque-susurrante?version=1", {
+          method: "GET",
+        });
+
+        const payload = (await response.json()) as unknown;
+
+        if (!isMounted) {
+          return;
+        }
+
+        if (response.ok && "id" in (payload as Record<string, unknown>)) {
+          const normalized = adventureSchema.parse(payload);
+          setAdventure(normalized);
+          setAdventureSource(normalized.id === seedAdventure.id ? "seed" : "db");
+        }
+      } catch {
+        if (!isMounted) {
+          return;
+        }
+
+        setAdventure(seedAdventure);
+        setAdventureSource("seed");
+      } finally {
+        if (isMounted) {
+          setIsLoadingAdventure(false);
+        }
+      }
+    }
+
+    loadAdventure().catch(() => {
+      if (!isMounted) {
+        return;
+      }
+
+      setIsLoadingAdventure(false);
+      setAdventure(seedAdventure);
+      setAdventureSource("seed");
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
     async function hydrate() {
-      const [savedState, savedAudit] = await Promise.all([
-        loadLocalState(),
-        listLocalAuditEvents(),
-      ]);
+      const [savedState, savedAudit] = await Promise.all([loadLocalState(), listLocalAuditEvents()]);
 
       if (!isMounted) {
         return;
       }
 
-      setRuntimeState(savedState);
+      if (savedState) {
+        try {
+          getCurrentNode(adventure, savedState);
+          setRuntimeState(savedState);
+        } catch {
+          await clearLocalState();
+          setRuntimeState(null);
+        }
+      } else {
+        setRuntimeState(null);
+      }
+
       setAuditEvents(savedAudit);
       setIsHydrating(false);
     }
@@ -82,11 +150,11 @@ export function GameShell() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [adventure]);
 
   const startGame = () => {
     startTransition(() => {
-      const nextState = initState(seedAdventure);
+      const nextState = initState(adventure);
 
       setRuntimeState(nextState);
       void Promise.all([
@@ -107,7 +175,7 @@ export function GameShell() {
     }
 
     startTransition(() => {
-      const nextState = applyChoice(seedAdventure, runtimeState, choiceKey);
+      const nextState = applyChoice(adventure, runtimeState, choiceKey);
 
       setRuntimeState(nextState);
       void Promise.all([
@@ -138,7 +206,10 @@ export function GameShell() {
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-700">
             Runtime local jugable
           </p>
-          <h2 className="text-2xl font-semibold text-stone-900">{seedAdventure.title}</h2>
+          <h2 className="text-2xl font-semibold text-stone-900">{adventure.title}</h2>
+          <p className="text-sm text-stone-600">
+            Fuente de contenido: {adventureSource === "db" ? "base de datos" : "seed local"}
+          </p>
         </div>
         <div className="flex gap-2">
           <button
@@ -159,6 +230,10 @@ export function GameShell() {
           </button>
         </div>
       </header>
+
+      {isLoadingAdventure ? (
+        <p className="mt-4 text-sm text-stone-600">Cargando aventura publicada...</p>
+      ) : null}
 
       {isHydrating ? (
         <p className="mt-5 text-stone-700">Cargando guardado local...</p>
